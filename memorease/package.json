@@ -1,0 +1,25 @@
+{
+  "name": "memorease",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "firebase": "^9.0.2",
+    "next": "11.1.2",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-preset-env": "^6.7.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-firebase-hooks": "^3.0.4",
+    "tailwindcss": "^2.2.15"
+  },
+  "devDependencies": {
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.2"
+  }
+}
