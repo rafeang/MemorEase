@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase/clientApp";
 import { doc, onSnapshot, collection, updateDoc } from "firebase/firestore";
+import axios from 'axios';
 
 export default function Index() {
 	const[message, setMessage] = useState("")
@@ -14,6 +15,8 @@ export default function Index() {
           body: message
         });
         // call raspberry pi server to trigger hardware functions
+        const dweet = { data: message };
+        axios.post('https://dweet.io/dweet/for/memorease', dweet);
       }, ttr)
     );
   }
