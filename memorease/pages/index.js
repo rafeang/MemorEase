@@ -48,7 +48,7 @@ export default function Index() {
   
 	return (
 		<div>
-			<h1 className="p-5 m-5 text-9xl">{ message }</h1>
+			<h1 className="p-5 m-5 text-8xl leading-snug">{ message }</h1>
 		</div>
 	)
 }
