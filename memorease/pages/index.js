@@ -4,15 +4,17 @@ import { doc, onSnapshot, collection, updateDoc } from "firebase/firestore";
 import axios from 'axios';
 
 export default function Index() {
-	const[message, setMessage] = useState("")
+	const [message, setMessage] = useState("")
+  const [imageUrl, setImageUrl] = useState("")
   const dayInMs = 24 * 60 * 60 * 1000;
   var countdowns = []
 
-  const scheduleMessage = function(message, ttr) {
+  const scheduleMessage = function(message, imageUrl, ttr) {
     countdowns.push(
       setTimeout(() => {
         updateDoc(doc(db, "message", "displayed"), {
-          body: message
+          body: message,
+          imageUrl: imageUrl
         });
         // call raspberry pi server to trigger hardware functions
         const dweet = { data: message };
@@ -38,12 +40,13 @@ export default function Index() {
         let reminderTime = new Date(year, month, day, hr, min);
         let timeDiff = reminderTime.getTime() - currentTime.getTime();
         let timeToReminder = timeDiff > 0 ? timeDiff : timeDiff + dayInMs;
-        scheduleMessage(doc.data().message, timeToReminder);
+        scheduleMessage(doc.data().message, doc.data().imageUrl, timeToReminder);
       });
     });
 
     onSnapshot(doc(db, "message", "displayed"), (doc) => {
       setMessage(doc.data().body);
+      setImageUrl(doc.data().imageUrl)
     });
 
     setTimeout(function() { window.location.reload(true); }, dayInMs);
@@ -52,6 +55,11 @@ export default function Index() {
 	return (
 		<div>
 			<h1 className="p-5 m-5 text-8xl leading-snug">{ message }</h1>
+      {
+        imageUrl === '' ? ''
+        :
+        <img src={imageUrl} alt="reminderImage" />
+      }
 		</div>
 	)
 }

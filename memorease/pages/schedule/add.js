@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../../firebase/clientApp";
+import { db, storage, ref, uploadBytesResumable, getDownloadURL } from "../../firebase/clientApp";
 import List from "../../components/list";
 
 export default function Add() {
@@ -22,18 +22,75 @@ export default function Add() {
     return hour + ":" + min;
   }
 
+  const ref_file = useRef();
+
   const handleSubmit = function(event) {
     event.preventDefault();
     if (message === "") {
       alert("Please provide a reminder message");
       return
-    } 
-    let time = formatTime(hour, minute, amPm)
-    setDoc(doc(db, "reminders", time), {
-      message: message
-    });
-    setMessage("");
-    alert("Set reminder: " + message + " for " + time);
+    } else if (imageAsFile === '') {
+      alert("Image null")
+      return
+    }
+
+    /////////////////////// Image Storing ///////////////////////////////
+    const time = formatTime(hour, minute, amPm)
+    const imagePath = `/images/${time + "_" + imageAsFile.name}` // image path
+    const imgStorageRef = ref(storage, imagePath)
+    const metadata = {
+      contentType: 'image/jpeg'
+    };
+    const uploadTask = uploadBytesResumable(imgStorageRef, imageAsFile, metadata);
+
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on('state_changed',
+    (snapshot) => {
+      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+      switch (snapshot.state) {
+        case 'paused':
+          console.log('Upload is paused');
+          break;
+        case 'running':
+          console.log('Upload is running');
+          break;
+      }
+
+      ///////////////// Fully uploaded to Firebase ///////////////////
+      if (progress === 100) {        
+        const pathReference = ref(storage, imagePath)
+        getDownloadURL(pathReference)
+          .then((url) => {
+            // setImageAsUrl(url)
+            setDoc(doc(db, "reminders", time), {
+              message: message,
+              imageUrl: url
+            });
+            
+            ref_file.current.value = "";
+            setTempImageUrl("");
+            setMessage("");
+            alert("Set reminder: " + message + " for " + time);
+          })
+        
+      }
+    })
+    
+  }
+
+  const [imageAsFile, setImageAsFile] = useState('')
+  // const [imageAsUrl, setImageAsUrl] = useState('')
+  const [tempImageUrl, setTempImageUrl] = useState('')
+
+  const handleImageAsFile = (e) => {
+    const image = e.target.files[0]
+    if (image) {
+      setImageAsFile(imageFile => (image)) // Setting image as file 
+      setTempImageUrl(URL.createObjectURL(image)) // For preview
+    }
+    
   }
 
   return (
@@ -82,6 +139,24 @@ export default function Add() {
                 { dayShift.map((shift) => (<option value={ shift }>{ shift }</option>))}
               </select>
             </div>
+          </div>
+        </div>
+        <div className="flex flex-wrap mx-6 my-6">
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label className="block uppercase text-gray-700 font-bold mb-2">
+              Image (Optional)
+            </label>
+            <input 
+              ref={ref_file}
+              type="file"
+              onChange={handleImageAsFile}
+            />
+            {
+              tempImageUrl === '' ?
+              ''
+              :
+              <img src={tempImageUrl} alt="..." />
+            }
           </div>
         </div>
         <div className="flex flex-wrap mx-6 mb-6">
