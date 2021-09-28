@@ -2,15 +2,32 @@ import React, { useState, useEffect, useRef } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { db, storage, ref, uploadBytesResumable, getDownloadURL } from "../../firebase/clientApp";
 import List from "../../components/list";
+import Recorder from "../../components/recorder";
 
 export default function Add() {
   const [hour, setHour] = useState("00")
   const [minute, setMinute] = useState("00")
   const [amPm, setAmPm] = useState("AM")
   const [message, setMessage] = useState("")
+  const [recorderBlob, setRecorderBlob] = useState(null)
+  const [imageUrl, setImageUrl] = useState("")
+  const [audioUrl, setAudioUrl] = useState("")
+  const [imageAsFile, setImageAsFile] = useState('')
+  const [tempImageUrl, setTempImageUrl] = useState('')
   const hours = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
   const minutes = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"]
   const dayShift = ["AM", "PM"]
+  const ref_file = useRef()
+  const imageMeta = {
+    contentType: 'image/jpeg'
+  };
+  const audioMeta = {
+    contentType: 'audio/mp3'
+  };
+
+  const handleRecorderChange = function(blob) {
+    setRecorderBlob(blob);
+  }
 
   const formatTime = function(hr, min, ampm){
     var hour;
@@ -22,67 +39,73 @@ export default function Add() {
     return hour + ":" + min;
   }
 
-  const ref_file = useRef();
+  useEffect(() => {
+    if (imageAsFile !== '') {
+      const time = formatTime(hour, minute, amPm)
+      const imagePath = `/images/${time + "_" + imageAsFile.name}`;
+      uploadToStorage(imagePath, imageAsFile, imageMeta)
+    }
+  }, [imageAsFile])
+
+  useEffect(() => {
+    if (recorderBlob !== null) {
+      const time = formatTime(hour, minute, amPm)
+      const dateString = new Date().toLocaleDateString().replace(/\//g, "_");
+      const blobPath = `/audio/${time + "_" + dateString}`;
+      uploadToStorage(blobPath, recorderBlob, audioMeta);
+    }
+  }, [recorderBlob])
+
+  const uploadToStorage = async function(path, file, meta) {
+    const storageRef = ref(storage, path);
+    const uploadTask = uploadBytesResumable(storageRef, file, meta);
+    var returnUrl = ""
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+        }
+        if (progress === 100) {        
+          const pathReference = ref(storage, path);
+          getDownloadURL(pathReference)
+            .then((url) => {
+              if (meta.contentType === "image/jpeg") {
+                setImageUrl(url)
+              } else {
+                setAudioUrl(url)
+              }
+            });
+        }
+    });
+  }
 
   const handleSubmit = function(event) {
     event.preventDefault();
     if (message === "") {
       alert("Please provide a reminder message");
       return
-    } else if (imageAsFile === '') {
-      alert("Image null")
-      return
     }
-
-    /////////////////////// Image Storing ///////////////////////////////
     const time = formatTime(hour, minute, amPm)
-    const imagePath = `/images/${time + "_" + imageAsFile.name}` // image path
-    const imgStorageRef = ref(storage, imagePath)
-    const metadata = {
-      contentType: 'image/jpeg'
-    };
-    const uploadTask = uploadBytesResumable(imgStorageRef, imageAsFile, metadata);
-
-    // Listen for state changes, errors, and completion of the upload.
-    uploadTask.on('state_changed',
-    (snapshot) => {
-      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log('Upload is ' + progress + '% done');
-      switch (snapshot.state) {
-        case 'paused':
-          console.log('Upload is paused');
-          break;
-        case 'running':
-          console.log('Upload is running');
-          break;
-      }
-
-      ///////////////// Fully uploaded to Firebase ///////////////////
-      if (progress === 100) {        
-        const pathReference = ref(storage, imagePath)
-        getDownloadURL(pathReference)
-          .then((url) => {
-            // setImageAsUrl(url)
-            setDoc(doc(db, "reminders", time), {
-              message: message,
-              imageUrl: url
-            });
-            
-            ref_file.current.value = "";
-            setTempImageUrl("");
-            setMessage("");
-            alert("Set reminder: " + message + " for " + time);
-          })
-        
-      }
-    })
-    
+    setDoc(doc(db, "reminders", time), {
+      message: message,
+      imageUrl: imageUrl,
+      audioUrl: audioUrl
+    }).then(() => {
+      setMessage("");
+      ref_file.current.value = "";
+      setTempImageUrl("");
+      setImageUrl("");
+      setAudioUrl("");
+      alert("Set reminder: " + message + " for " + time);
+    });
   }
-
-  const [imageAsFile, setImageAsFile] = useState('')
-  // const [imageAsUrl, setImageAsUrl] = useState('')
-  const [tempImageUrl, setTempImageUrl] = useState('')
 
   const handleImageAsFile = (e) => {
     const image = e.target.files[0]
@@ -132,31 +155,13 @@ export default function Add() {
               >
                 { minutes.map((min) => (<option value={ min }>{ min }</option>))}
               </select>
-              <select className="form-input w-1/4 block py-3 mr-4 mb-3 text-center" type="text" placeholder="00"
+              <select className="form-input w-1/4 block py-3 mr mb-3 text-center" type="text" placeholder="00"
                 value={ amPm }
                 onChange={ (e) => setAmPm(e.target.value) }
               >
                 { dayShift.map((shift) => (<option value={ shift }>{ shift }</option>))}
               </select>
             </div>
-          </div>
-        </div>
-        <div className="flex flex-wrap mx-6 my-6">
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label className="block uppercase text-gray-700 font-bold mb-2">
-              Image (Optional)
-            </label>
-            <input 
-              ref={ref_file}
-              type="file"
-              onChange={handleImageAsFile}
-            />
-            {
-              tempImageUrl === '' ?
-              ''
-              :
-              <img src={tempImageUrl} alt="..." />
-            }
           </div>
         </div>
         <div className="flex flex-wrap mx-6 mb-6">
@@ -172,6 +177,36 @@ export default function Add() {
             </textarea>
           </div>
         </div>
+        <div className="flex flex-wrap mx-6 my-6">
+          <div className="w-5/12 px-3 mb-6 md:mb-0">
+            <label className="block uppercase text-gray-700 font-bold mb-2">
+              Image (Optional)
+            </label>
+            <input 
+              ref={ref_file}
+              type="file"
+              onChange={handleImageAsFile}
+            />
+            {
+              tempImageUrl === '' ?
+              ''
+              :
+              <img src={tempImageUrl} alt="..." />
+            }
+            {imageUrl === "" ? "Awaiting image file..." : "Image upload success"}
+          </div>
+          <div className="w-7/12 px-3 mb-6 md:mb-0">
+            <label className="block uppercase text-gray-700 font-bold mb-2">
+              Audio (Optional)
+            </label>
+            <Recorder
+              onChange={handleRecorderChange}
+            >
+            </Recorder>
+            {audioUrl === "" ? "Awaiting Recording..." : "Upload Success"}
+          </div>
+        </div>
+
         <div className="justify-center flex flex-wrap mx-6 mb-6">
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Add Reminder
