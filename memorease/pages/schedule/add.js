@@ -118,16 +118,23 @@ export default function Add() {
 
   return (
     <>
+    <header class="bg-gray-800">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl  text-white ">
+        Schedule Our Reminders
+      </h1>
+    </div>
+  </header>
       <form className="w-full max-w"
         onSubmit={ handleSubmit }
       >
-        <div className="flex flex-wrap mx-6 my-6">
+        <div className="flex flex-wrap mx-6 my-8">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label className="block uppercase text-gray-700 font-bold mb-2">
               Type
             </label>
             <div className="relative">
-              <select className="block w-full form-input py-3 px-4 pr-8">
+              <select className="block w-full form-input py-3 px-4 pr-8 shadow-md">
                 <option>Daily</option>
                 {/* <option>Weekly</option>
                 <option>Once</option> */}
@@ -142,20 +149,20 @@ export default function Add() {
               Time
             </label>
             <div className="flex">
-              <select className="form-input w-1/3 block py-3 mr-4 mb-3 text-center" type="text" placeholder="00"
+              <select className="form-input w-1/3 block py-3 mr-4 mb-3 text-center shadow-md" type="text" placeholder="00"
                 value={ hour }
                 onChange={ (e) => setHour(e.target.value) }
               >
                 { hours.map((hr) => (<option value={ hr }>{ hr }</option>))}
               </select>
               <p className="pt-2">:</p>
-              <select className="form-input w-1/3 block py-3 mx-4 mb-3 text-center" type="text" placeholder="00"
+              <select className="form-input w-1/3 block py-3 mx-4 mb-3 text-center shadow-md" type="text" placeholder="00"
                 value={ minute }
                 onChange={ (e) => setMinute(e.target.value) }
               >
                 { minutes.map((min) => (<option value={ min }>{ min }</option>))}
               </select>
-              <select className="form-input w-1/4 block py-3 mr mb-3 text-center" type="text" placeholder="00"
+              <select className="form-input w-1/4 block py-3 mr mb-3 text-center shadow-md" type="text" placeholder="00"
                 value={ amPm }
                 onChange={ (e) => setAmPm(e.target.value) }
               >
@@ -169,7 +176,7 @@ export default function Add() {
             <label className="block uppercase text-gray-700 font-bold mb-2">
               Message
             </label>
-            <textarea className="form-input w-full h-32 block py-3 px-4 mb-3"
+            <textarea className="form-input w-full h-32 block py-3 px-4 mb-3 shadow-md"
               placeholder="Enter reminder here"
               value={ message }
               onChange={ (e) => setMessage(e.target.value) }
@@ -208,7 +215,7 @@ export default function Add() {
         </div>
 
         <div className="justify-center flex flex-wrap mx-6 mb-6">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md">
             Add Reminder
           </button>
         </div>
