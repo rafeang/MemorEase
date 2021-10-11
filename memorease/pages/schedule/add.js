@@ -17,6 +17,8 @@ export default function Add() {
   const hours = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
   const minutes = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"]
   const dayShift = ["AM", "PM"]
+  const locations = ["Bedroom", "Kitchen", "Bathroom", "Living Room"]
+  const [location, setLocation] = useState(locations[0])
   const ref_file = useRef()
   const imageMeta = {
     contentType: 'image/jpeg'
@@ -95,10 +97,12 @@ export default function Add() {
     const time = formatTime(hour, minute, amPm)
     setDoc(doc(db, "reminders", time), {
       message: message,
+      location: location,
       imageUrl: imageUrl,
       audioUrl: audioUrl
     }).then(() => {
       setMessage("");
+      setLocation(location[0]);
       ref_file.current.value = "";
       setTempImageUrl("");
       setImageUrl("");
@@ -124,13 +128,17 @@ export default function Add() {
         <div className="flex flex-wrap mx-6 my-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label className="block uppercase text-gray-700 font-bold mb-2">
-              Type
+              Location
             </label>
             <div className="relative">
-              <select className="block w-full form-input py-3 px-4 pr-8">
-                <option>Daily</option>
-                {/* <option>Weekly</option>
-                <option>Once</option> */}
+              <select className="block w-full form-input py-3 px-4 pr-8"
+                      onChange={ (e) => setLocation(e.target.value) }
+              >
+                {
+                  locations.map((location) => (
+                    <option>{ location }</option>
+                  ))
+                }
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>

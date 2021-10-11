@@ -23,6 +23,7 @@ export default function List() {
         let obj = {}
         obj["time"] = doc.id;
         obj["message"] = doc.data().message
+        obj["location"] = doc.data().location
         reminders.push(obj);
       });
       setReminders(reminders);
@@ -35,7 +36,8 @@ export default function List() {
         <thead>
           <tr className="bg-blue-100">
             <th className="table-units md:w-1/12 w-1/6">Time</th>
-            <th className="table-units md:w-10/12 w-4/6">Reminder</th>
+            <th className="table-units md:w-2/12 w-1/6">Location</th>
+            <th className="table-units md:w-8/12 w-3/6">Reminder</th>
             <th className="table-units md:w-1/12 w-1/6">Delete?</th>
           </tr>
         </thead>
@@ -43,6 +45,7 @@ export default function List() {
           { reminders.map((reminder) => (
             <tr key={ reminder.time }>
               <td className="table-units">{ reminder.time }</td>
+              <td className="table-units">{ reminder.location }</td>
               <td className="table-units">{ reminder.message }</td>
               <td className="table-units">
                 <button className="bg-red-300 hover:bg-red-500 text-white p-2 rounded-full"
