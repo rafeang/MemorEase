@@ -105,3 +105,5 @@ dist
 
 # Env (Firebase Config)
 .env.local
+# Local Netlify folder
+.netlify
