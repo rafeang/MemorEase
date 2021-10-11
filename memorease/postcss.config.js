@@ -3,4 +3,8 @@ module.exports = {
     tailwindcss: {},
     autoprefixer: {},
   },
+  purge: [
+    './pages/**/*.js',
+    './components/**/*.js'
+]
 }
