@@ -5,6 +5,9 @@ import List from "../../components/list";
 import Recorder from "../../components/recorder";
 
 export default function Add() {
+  const [isDisabled, setIsDisabled] = useState("")
+  const [buttonColour, setButtonColour] = useState("bg-blue-500")
+  const [buttonText, setButtonText] = useState("Add Reminder")
   const [hour, setHour] = useState("00")
   const [minute, setMinute] = useState("00")
   const [amPm, setAmPm] = useState("AM")
@@ -58,12 +61,22 @@ export default function Add() {
     }
   }, [recorderBlob])
 
+  useEffect(() => {
+    if (isDisabled == "") {
+      setButtonColour("bg-blue-500")
+      setButtonText("Add Reminder")
+    } else {
+      setButtonColour("bg-blue-200")
+      setButtonText("Uploading...")
+    }
+  }, [isDisabled])
+
   const uploadToStorage = async function(path, file, meta) {
     const storageRef = ref(storage, path);
     const uploadTask = uploadBytesResumable(storageRef, file, meta);
-    var returnUrl = ""
     uploadTask.on('state_changed',
       (snapshot) => {
+        setIsDisabled("true") 
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
         switch (snapshot.state) {
@@ -74,9 +87,11 @@ export default function Add() {
             console.log('Upload is running');
             break;
         }
-        if (progress === 100) {        
-          const pathReference = ref(storage, path);
-          getDownloadURL(pathReference)
+        if (progress === 100) {  
+          setTimeout(() => {
+            setIsDisabled("") 
+            const pathReference = ref(storage, path);
+            getDownloadURL(pathReference)
             .then((url) => {
               if (meta.contentType === "image/jpeg") {
                 setImageUrl(url)
@@ -84,6 +99,7 @@ export default function Add() {
                 setAudioUrl(url)
               }
             });
+          }, 1000);
         }
     });
   }
@@ -117,7 +133,6 @@ export default function Add() {
       setImageAsFile(imageFile => (image)) // Setting image as file 
       setTempImageUrl(URL.createObjectURL(image)) // For preview
     }
-    
   }
 
   return (
@@ -216,8 +231,10 @@ export default function Add() {
         </div>
 
         <div className="justify-center flex flex-wrap mx-6 mb-6">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Add Reminder
+          <button className={`${ buttonColour } hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`}
+                  disabled={ isDisabled }
+          >
+            { buttonText }
           </button>
         </div>
       </form>
