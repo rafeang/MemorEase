@@ -146,7 +146,7 @@ export default function Add() {
               Location
             </label>
             <div className="relative">
-              <select className="block w-full bg-gray-200 appearance-none border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-blue-50 py-3 px-4 pr-8"
+              <select className="block w-full form-input py-3 px-4 pr-8"
                       onChange={ (e) => setLocation(e.target.value) }
               >
                 {
@@ -167,20 +167,20 @@ export default function Add() {
               Time
             </label>
             <div className="flex">
-              <select className="bg-gray-200 appearance-none border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-blue-50 w-1/3 block py-3 mr-4 mb-3 text-center" type="text" placeholder="00"
+              <select className="form-input w-1/3 block py-3 mr-4 mb-3 text-center" type="text" placeholder="00"
                 value={ hour }
                 onChange={ (e) => setHour(e.target.value) }
               >
                 { hours.map((hr, idx) => (<option key={ idx } value={ hr }>{ hr }</option>))}
               </select>
               <p className="pt-2">:</p>
-              <select className="bg-gray-200 appearance-none border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-blue-50 w-1/3 block py-3 mx-4 mb-3 text-center" type="text" placeholder="00"
+              <select className="form-input w-1/3 block py-3 mx-4 mb-3 text-center" type="text" placeholder="00"
                 value={ minute }
                 onChange={ (e) => setMinute(e.target.value) }
               >
                 { minutes.map((min, idx) => (<option key={ idx } value={ min }>{ min }</option>))}
               </select>
-              <select className="bg-gray-200 appearance-none border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-blue-50 w-1/4 block py-3 mr mb-3 text-center" type="text" placeholder="00"
+              <select className="form-input w-1/4 block py-3 mr mb-3 text-center" type="text" placeholder="00"
                 value={ amPm }
                 onChange={ (e) => setAmPm(e.target.value) }
               >
@@ -194,7 +194,7 @@ export default function Add() {
             <label className="block uppercase text-gray-700 font-bold mb-2">
               Message
             </label>
-            <textarea className="bg-gray-200 appearance-none border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-blue-50 w-full h-32 block py-3 px-4 mb-3"
+            <textarea className="form-input w-full h-32 block py-3 px-4 mb-3"
               placeholder="Enter reminder here"
               value={ message }
               onChange={ (e) => setMessage(e.target.value) }
