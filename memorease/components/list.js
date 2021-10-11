@@ -32,22 +32,22 @@ export default function List() {
 
   return (
     <div className="flex flex-wrap mx-9 my-6">
-      <table className="w-full table-fixed table-units">
+      <table className="w-full table-fixed border border-blue-300 p-2 text-center">
         <thead>
           <tr className="bg-blue-100">
-            <th className="table-units md:w-1/12 w-1/6">Time</th>
-            <th className="table-units md:w-2/12 w-1/6">Location</th>
-            <th className="table-units md:w-8/12 w-3/6">Reminder</th>
-            <th className="table-units md:w-1/12 w-1/6">Delete?</th>
+            <th className="border border-blue-300 p-2 text-center md:w-1/12 w-1/6">Time</th>
+            <th className="border border-blue-300 p-2 text-center md:w-2/12 w-1/6">Location</th>
+            <th className="border border-blue-300 p-2 text-center md:w-8/12 w-3/6">Reminder</th>
+            <th className="border border-blue-300 p-2 text-center md:w-1/12 w-1/6">Delete?</th>
           </tr>
         </thead>
         <tbody>
           { reminders.map((reminder) => (
             <tr key={ reminder.time }>
-              <td className="table-units">{ reminder.time }</td>
-              <td className="table-units">{ reminder.location }</td>
-              <td className="table-units">{ reminder.message }</td>
-              <td className="table-units">
+              <td className="border border-blue-300 p-2 text-center">{ reminder.time }</td>
+              <td className="border border-blue-300 p-2 text-center">{ reminder.location }</td>
+              <td className="border border-blue-300 p-2 text-center">{ reminder.message }</td>
+              <td className="border border-blue-300 p-2 text-center">
                 <button className="bg-red-300 hover:bg-red-500 text-white p-2 rounded-full"
                   onClick={ () => deleteReminder(reminder.time) }
                 >
