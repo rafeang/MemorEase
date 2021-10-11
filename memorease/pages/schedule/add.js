@@ -150,8 +150,10 @@ export default function Add() {
                       onChange={ (e) => setLocation(e.target.value) }
               >
                 {
-                  locations.map((location) => (
-                    <option>{ location }</option>
+                  locations.map((location, idx) => (
+                    <option key={idx}>
+                      { location }
+                    </option>
                   ))
                 }
               </select>
@@ -169,20 +171,20 @@ export default function Add() {
                 value={ hour }
                 onChange={ (e) => setHour(e.target.value) }
               >
-                { hours.map((hr) => (<option value={ hr }>{ hr }</option>))}
+                { hours.map((hr, idx) => (<option key={ idx } value={ hr }>{ hr }</option>))}
               </select>
               <p className="pt-2">:</p>
               <select className="form-input w-1/3 block py-3 mx-4 mb-3 text-center" type="text" placeholder="00"
                 value={ minute }
                 onChange={ (e) => setMinute(e.target.value) }
               >
-                { minutes.map((min) => (<option value={ min }>{ min }</option>))}
+                { minutes.map((min, idx) => (<option key={ idx } value={ min }>{ min }</option>))}
               </select>
               <select className="form-input w-1/4 block py-3 mr mb-3 text-center" type="text" placeholder="00"
                 value={ amPm }
                 onChange={ (e) => setAmPm(e.target.value) }
               >
-                { dayShift.map((shift) => (<option value={ shift }>{ shift }</option>))}
+                { dayShift.map((shift, idx) => (<option key={ idx } value={ shift }>{ shift }</option>))}
               </select>
             </div>
           </div>

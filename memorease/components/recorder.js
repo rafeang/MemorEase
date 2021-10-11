@@ -71,8 +71,8 @@ export default function Recorder({onChange}) {
         className={ `${buttonStyle} px-4 mr-5 content-center` }
         onClick={ !isRecording ? startRecording : stopRecording }
       >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d={ iconPath } clip-rule="evenodd" />
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d={ iconPath } clipRule="evenodd" />
         </svg>
       </button>
       <audio
