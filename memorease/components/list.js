@@ -4,14 +4,6 @@ import { onSnapshot, collection, deleteDoc, doc } from "firebase/firestore";
 
 export default function List() {
   const [reminders, setReminders] = useState([])
-  // const deleteReminder = async (time) => {
-  //   try {
-  //     await deleteDoc(doc(db, "reminders", time));
-  //     alert("Reminder deleted");
-  //   } catch(e) {
-  //     alert(e.message);
-  //   }
-  // }
   const deleteReminder = function(time) {
     deleteDoc(doc(db, "reminders", time));
   }
