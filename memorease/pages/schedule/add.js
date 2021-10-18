@@ -118,7 +118,7 @@ export default function Add() {
       audioUrl: audioUrl
     }).then(() => {
       setMessage("");
-      setLocation(location[0]);
+      setLocation(location);
       ref_file.current.value = "";
       setTempImageUrl("");
       setImageUrl("");
