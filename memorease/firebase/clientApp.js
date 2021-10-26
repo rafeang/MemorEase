@@ -4,12 +4,12 @@ import { getFirestore, doc, onSnapshot, getDocs, collection } from "firebase/fir
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDWohX2aFZWDLe47ix_4BaATguSaOHhzkI",
-    authDomain: "memorease-9a0bf.firebaseapp.com",
-    projectId: "memorease-9a0bf",
-    storageBucket: "memorease-9a0bf.appspot.com",
-    messagingSenderId: "499880311177",
-    appId: "1:499880311177:web:6c69af4849d58cc97dc958"
+    apiKey: process.env.API_KEY,
+    authDomain: process.env.AUTH_DOMAIN,
+    projectId: process.env.PROJECT_ID,
+    storageBucket: process.env.STORAGE_BUCKET,
+    messagingSenderId: process.env.MESSAGING_SENDER_ID,
+    appId: process.env.APP_ID
 };
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
