@@ -58,10 +58,10 @@ export default function Index() {
 	return (
 		<div > 
       <div className="p-10 bg-gray-200 flex flex-col justify-center items-center">  
-        <div className="max-w-lg rounded overflow-hidden shadow-lg bg-blue-300">
+        <div className=" flex max-w-lg rounded overflow-hidden shadow-lg bg-blue-300">
           <div className="px-6 py-4 font-mono">
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-            <div className="font-bold text-3xl mb-2 text-center">Reminders</div>
+          <svg className="  w-8 h-9 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+            <div className=" font-bold text-3xl mb-2 inline-block pl-4">Reminders</div>
             <hr></hr>
             {
         imageUrl === '' ? ''
