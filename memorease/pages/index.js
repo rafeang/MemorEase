@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { db } from "../firebase/clientApp";
 import { doc, onSnapshot, collection, updateDoc } from "firebase/firestore";
 import axios from 'axios';
+import Clock from 'react-live-clock'
 <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet"></link>
 
 export default function Index() {
@@ -86,7 +87,15 @@ export default function Index() {
         <div className=" flex max-w-lg rounded overflow-hidden shadow-lg bg-blue-300">
           <div className="px-6 py-4 font-mono">
           <svg className="  w-8 h-9 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-            <div className=" font-bold text-3xl mb-2 inline-block pl-4">Reminders</div>
+            <div className=" font-bold text-3xl mb-2 inline-block p-4">
+              Reminders
+              <Clock
+                format={'HH:mm:ss'}
+                ticking={true}
+                timezone={'Asia/Singapore'}
+                className="text-3xl text-center font-semibold font-mono pl-10"
+              />  
+            </div>
             <hr></hr>
             {
         imageUrl === '' ? ''
