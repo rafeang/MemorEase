@@ -93,7 +93,7 @@ export default function Index() {
               format={'HH:mm:ss'}
               ticking={true}
               timezone={'Asia/Singapore'}
-              className="text-3xl text-center font-semibold font-mono pl-15"
+              className="text-3xl text-center font-semibold font-mono pl-10"
             />  
           </div><hr/>
           <p className="text-gray-700 text-base text-4xl my-2 text-center">
