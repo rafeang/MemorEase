@@ -8,7 +8,7 @@ export default function Add() {
   const [isDisabled, setIsDisabled] = useState("")
   const [buttonColour, setButtonColour] = useState("bg-blue-500")
   const [buttonText, setButtonText] = useState("Add Reminder")
-  const [hour, setHour] = useState("00")
+  const [hour, setHour] = useState("01")
   const [minute, setMinute] = useState("00")
   const [amPm, setAmPm] = useState("AM")
   const [message, setMessage] = useState("")
