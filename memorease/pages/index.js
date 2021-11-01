@@ -96,7 +96,7 @@ export default function Index() {
               className="text-4xl text-center font-semibold font-mono pl-12 float-right"
             />  
           </div><hr/>
-          <p className="text-gray-700 text-base text-5xl my-2 text-center">
+          <p className="text-gray-700 text-base text-5xl my-2 p-2 text-center">
             {message}
           </p>
           {
